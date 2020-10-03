@@ -1,14 +1,6 @@
 import requests
 import pprint
-API_URL = "https://canvas.ubc.ca/api/v1/users/self"
-API_KEY = ""
 
-req = requests.get(API_URL, headers = {"Authorization": "Bearer 11224~xe1g377tlaOPI0lx5SBBVrmgpKZ9jH2WmUPoLn0NapADNNTkz6ufwmxbn2y5wfhT"})
-#print("Bearer {}".format(API_KEY))
-json_req = req.json()
-
-self_id = json_req["id"]
-print(self_id)
 
 
 '''
@@ -84,7 +76,12 @@ class Student():
 
 
     def add_extra_link(self, short_hand, link):
-        self.extra_links[short_hand] = 
+        self.extra_links[short_hand] = link
+    def remove_extra_link(self, short_hand):
+        if short_hand not in self.extra_links.keys():
+            print("short hand of extra link not in profile")
+            return 
+        self.extra_links.pop(short_hand)
 
 
     # will retrieve the 
@@ -286,23 +283,32 @@ class Assignments():
     def __repr__(self):
         return str(vars(self))
     
-    
+if __name__ == "__main__":
+    API_URL = "https://canvas.ubc.ca/api/v1/users/self"
+    API_KEY = ""
+
+    req = requests.get(API_URL, headers = {"Authorization": "Bearer 11224~xe1g377tlaOPI0lx5SBBVrmgpKZ9jH2WmUPoLn0NapADNNTkz6ufwmxbn2y5wfhT"})
+    #print("Bearer {}".format(API_KEY))
+    json_req = req.json()
+
+    self_id = json_req["id"]
+    print(self_id)
 
 
-sa = Student(API_KEY)
-pp = pprint.PrettyPrinter(indent=4)
-pp.pprint(sa.courses)
+    sa = Student(API_KEY)
+    pp = pprint.PrettyPrinter(indent=4)
+    pp.pprint(sa.courses)
 
-# TODO
-# Remove a course from the listing 
-# add a course?
+    # TODO
+    # Remove a course from the listing 
+    # add a course?
 
-# For a course get the relevant asingments
-def print_ass(student):
-    for c in student.courses:
-        course = student.courses[c]
-        assignments = course.assignments
-        for a in assignments:
-            print(course.name, a.name)
+    # For a course get the relevant asingments
+    def print_ass(student):
+        for c in student.courses:
+            course = student.courses[c]
+            assignments = course.assignments
+            for a in assignments:
+                print(course.name, a.name)
 
-print_ass(sa)
+    print_ass(sa)
